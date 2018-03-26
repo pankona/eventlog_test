@@ -20,6 +20,7 @@ func (p *program) Start(s service.Service) error {
 	// this function should not block
 	p.logger.Info("Start called!")
 	fmt.Println("Start called!: ", s)
+	p.doneCh = make(chan struct{})
 	go p.run()
 	return nil
 }
@@ -50,9 +51,7 @@ func main() {
 		Description: "This is event log test from Go!",
 	}
 
-	prg := &program{
-		doneCh: make(chan struct{}),
-	}
+	prg := &program{}
 	s, err := service.New(prg, cfg)
 	if err != nil {
 		log.Fatal(err)
